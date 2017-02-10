@@ -1,0 +1,9 @@
+# series_detiempo
+pibmexico <-read.csv ("C:\\Users\\SALA-D13\\Desktop\\pibmexico.csv")
+pibmexico <-data.frame (pibmexico)
+s1 <- pibmexico [1:10, ]
+s2 <- pibmexico [11:20, ]
+s3 <- pibmexico [21:30, ]
+s4 <- pibmexico [31:40, ]
+plot (cbind(s2,s3) )
+plot (cbind(s1,s4))
