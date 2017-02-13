@@ -1,0 +1,29 @@
+inegipib <-data.frame (inegipib)
+s1 <- inegipib [1:10, ]
+s2 <- inegipib [11:20, ]
+s3 <- inegipib [21:30, ]
+s4 <- inegipib [31:40, ]
+s1 <- ts(s1, frequency = 10, start=1980) 
+s2 <- ts(s2, frequency = 10, start=1991) 
+s3 <- ts(s3, frequency = 10, start=2001) 
+s4 <- ts(s4, frequency = 10, start=2015) 
+plot (cbind(s2,s3))
+plot (cbind(s1,s4))
+
+seriemultiple <-ts.intersect(s1,s2,s3,s4)
+plot(seriemultiple, main = "serie de tiempo multiple", xlab="años", ylab= "numero de personas", col= "purple" )
+
+plot(seriemultiple02.07, main="serie de tiempo multiple", xlab="Años", ylab= "Numero de personas", col="violet")
+
+tiempo<- (read.csv("C:\\Users\\SalaD-9\\Desktop\\tiempo.csv"))
+genero<- (read.csv(("C:\\Users\\SalaD-9\\Desktop\\genero.csv")))
+edad<- (read.csv(("C:\\Users\\SalaD-9\\Desktop\\edad.csv")))
+pais<- (read.csv(("C:\\Users\\SalaD-9\\Desktop\\pais.csv")))
+
+tiempo <- ts(tiempo, frequency = 10, start=2:00) 
+genero <- ts(genero) 
+edad <- ts(edad, frequency = 10, start=18) 
+pais <- ts(pais) 
+
+seriemultiple <- ts.intersect(tiempo,genero,edad,pais)
+
