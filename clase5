@@ -1,0 +1,47 @@
+# para descomponer una sserie de tiempo graficamente se utiliza una 
+## funcion que se llama decompose, por lo que primero es importante
+# reconocer la serie de tiempo y despues apliucarle la funcion graficamente
+
+desoc<-sample(3:8, 44, replace = TRUE)
+tdesoc <- ts(desoc, frequency=4, start=2005)
+plot(decompose(tdesoc))
+
+TIIE2015<-read.csv("C:\\Users\\salaD-20\\Desktop\\TIIE2015.csv")
+TIIE2015<-ts(TIIE2015, frequency=52, start=2005)
+plot(decompose(TIIE2015))
+
+PIBM<-read.csv("C:\\Users\\salaD-20\\Desktop\\PIBM.csv")
+PIBM<-ts(PIBM, frequency=4, start=2007)
+plot(decompose(PIBM))
+View(PIBM)
+
+summary(PIBM)
+
+
+DEPIBM<-decompose(PIBM)
+
+names(DEPIBM)
+
+DEPIBM$trend
+
+##Traer la st  r
+
+cb<-read.csv("C:\\Users\\salaD-20\\Desktop\\cb.csv")
+cb<-ts(cb, frequency=12, start=2008)
+
+## desocomponer la st
+plot(decompose(cb))
+View(cb)
+
+summary(cb)
+
+
+decb<-decompose(cb)
+
+names(decb)
+
+##mandar llamar cada uno de los elementos
+decb$trend
+decb$random
+decb$figure
+decb$type
