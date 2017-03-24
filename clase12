@@ -1,0 +1,19 @@
+pib <- read.csv ("C:\\Users\\SALA-D4\\Desktop\\pib.csv")
+pibts <-ts(pib)
+### metodo de la deriva
+###este metodo consiste en que los pronostico puede incrementar 
+#### o dependiendo del promedio de los cambios historicos de la srt 
+#### codigo en r
+require(forecast)
+rwf (pib, h=4, drift=TRUE)
+
+pibmod1 <- meanf(pibts, h=12)###metodo del promedio
+pibmod2 <- naive(pibts, h=12)
+pibmod3 <- snaive(pibts, h=12)
+pibmod4 <- rwf(pibts, h=4, drift=T)
+
+plot(pibmod1, main="pronostico del pib trimestral")
+lines (pibmod2$mean, col=5)
+lines (pibmod3$mean, col=6)
+lines (pibmod4$mean, col=7)
+legend ("topleft", lty=1, col=("blue", "green", "pink") , legend=c("media", "ingenuo","ingenuo estacional", "deriva"))
