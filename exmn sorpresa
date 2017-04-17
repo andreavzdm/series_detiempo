@@ -1,0 +1,76 @@
+
+
+###### Ejercicio bajar acciones de ica, netflix, televisa y tv azteca diario
+###precio de cierre 2016
+###ajustar 4 modelos de suavizado exponencial simple (aplha=.2,.4,.6,.8)
+####### graficandolos en una sola grafica con la grafica decidir cual de los 4 es el mejor ajuste que tiene 
+##### una vez que hayan decidio graficamente el mejor ajuste 
+### aplicar la evaluacion de los ajustes y utilizar las medidas MAE y RMSE EXTRAYENdOLAS 
+#### de tal forma que creen un vector que compare estas medidas y este vector indique que alpha es la mejor.
+### identificar tendencia, estacionariedad y ciclos en la serie de tiempo e onterpretar los componentes
+
+ica <- read.csv("C:\\Users\\SALA-D5\\Desktop\\ica.csv")
+icas <- ts (ica, frequency=260, start=2016)
+
+View(icas)
+
+###suavizado exponencial en r#####
+install.packages("forecast")
+require (forecast)
+
+
+mod1 <-ses(icas, alpha=0.2, initial="simple", h=8)
+mod2 <-ses(icas, alpha=0.4, initial="simple", h=8)
+mod3 <-ses(icas, alpha=0.6, initial="simple", h=8)
+mod4 <-ses(icas, alpha=0.8, initial="simple", h=8)
+
+mod1$fitted
+mod2$fitted
+
+x11()
+plot(mod1, ylab="acciones", xlab="año", main="ICA", type="o")
+lines (fitted (mod1), col="brown", type="o")
+lines (fitted (mod2), col="red", type="o")
+lines (fitted (mod3), col="red", type="o")
+lines (fitted (mod4), col="pink", type="o")
+
+legend ("topleft", lty=1, col=c(1,"blue", "red", "green", "pink"), c( expression(alpha==0.2), expression(alpha=0.4), expression (alpha=.6), expression (alpha=.8)), pch=11)
+
+
+accuracy(mod2)
+accuracy (mod3)
+a1<- icas - mod1$fitted
+mean(abs(a1))####MAE
+sqrt(mean(a1^2))########RMSE
+evalm1<-accuracy(mod1)
+evalm1
+
+
+a2<-mod2$fitted
+mean(abs(a2))
+sqrt(mean(a2^2))
+evalm2<-accuracy(mod2)
+evalm2
+
+
+a3<-mod3$fitted
+mean(abs(a3))
+sqrt(mean(a3^2))
+evalm3<-accuracy(mod3)
+evalm3
+
+
+a4<- icas - mod4$fitted
+mean(abs(a4))
+sqrt(mean(a4^2))
+evalm4<-accuracy(mod4)
+evalm4
+
+MAE <- c(.2072082,.1562622,.1353103,.1266727)
+View(MAE)
+RMSE <- c(.3205524,.2580534,.2291552,.2157263)
+View(RMSE)
+
+
+which.min(MAE)
+which.min(RMSE)
