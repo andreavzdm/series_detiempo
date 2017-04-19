@@ -1,0 +1,159 @@
+
+
+###### Ejercicio bajar acciones de ica, netflix, televisa y tv azteca diario
+###precio de cierre 2016
+###ajustar 4 modelos de suavizado exponencial simple (aplha=.2,.4,.6,.8)
+####### graficandolos en una sola grafica con la grafica decidir cual de los 4 es el mejor ajuste que tiene 
+##### una vez que hayan decidio graficamente el mejor ajuste 
+### aplicar la evaluacion de los ajustes y utilizar las medidas MAE y RMSE EXTRAYENdOLAS 
+#### de tal forma que creen un vector que compare estas medidas y este vector indique que alpha es la mejor.
+### identificar tendencia, estacionariedad y ciclos en la serie de tiempo e onterpretar los componentes
+
+ica <- read.csv("C:\\Users\\SALA-D5\\Desktop\\ica.csv")
+icas <- ts (ica, frequency=260, start=2016)
+
+View(icas)
+
+###suavizado exponencial en r#####
+install.packages("forecast")
+require (forecast)
+
+
+mod1 <-ses(icas, alpha=0.2, initial="simple", h=8)
+mod2 <-ses(icas, alpha=0.4, initial="simple", h=8)
+mod3 <-ses(icas, alpha=0.6, initial="simple", h=8)
+mod4 <-ses(icas, alpha=0.8, initial="simple", h=8)
+
+mod1$fitted
+mod2$fitted
+
+x11()
+plot(mod1, ylab="acciones", xlab="año", main="ICA", type="o")
+lines (fitted (mod1), col="brown", type="o")
+lines (fitted (mod2), col="red", type="o")
+lines (fitted (mod3), col="red", type="o")
+lines (fitted (mod4), col="pink", type="o")
+
+legend ("topleft", lty=1, col=c(1,"blue", "red", "green", "pink"), c( expression(alpha==0.2), expression(alpha=0.4), expression (alpha=.6), expression (alpha=.8)), pch=11)
+
+
+accuracy(mod2)
+accuracy (mod3)
+a1<- icas - mod1$fitted
+mean(abs(a1))####MAE
+sqrt(mean(a1^2))########RMSE
+evalm1<-accuracy(mod1)
+evalm1
+
+
+a2<-mod2$fitted
+mean(abs(a2))
+sqrt(mean(a2^2))
+evalm2<-accuracy(mod2)
+evalm2
+
+
+a3<-mod3$fitted
+mean(abs(a3))
+sqrt(mean(a3^2))
+evalm3<-accuracy(mod3)
+evalm3
+
+
+a4<- icas - mod4$fitted
+mean(abs(a4))
+sqrt(mean(a4^2))
+evalm4<-accuracy(mod4)
+evalm4
+
+MAE <- c(.2072082,.1562622,.1353103,.1266727)
+View(MAE)
+RMSE <- c(.3205524,.2580534,.2291552,.2157263)
+View(RMSE)
+
+
+which.min(MAE)
+which.min(RMSE)
+
+
+######analisis de residuales####
+
+ica <- read.csv("C:\\Users\\SALA-D5\\Desktop\\ica.csv")
+icas <- ts (ica, frequency=260, start=2016)
+require (fpp)
+
+mod1 <-ses(icas, alpha=0.2, initial="simple", h=8)
+mod2 <-ses(icas, alpha=0.4, initial="simple", h=8)
+mod3 <-ses(icas, alpha=0.6, initial="simple", h=8)
+mod4 <-ses(icas, alpha=0.8, initial="simple", h=8) 
+
+
+####lo que se va a analizar de los residuales es que cumplan con las propiedades de residuales que consisten en:
+#1) los residuales no esten correlacionados.
+
+
+#2) Tienen media cero
+#3) Tienen varianza constante
+#4) los residuales estan normalmente ditribuidos
+
+### para esto en R se tienes que obtener los residuales de cada unos de los 4 modelos
+### con la finalidad de analizarlos y conocer su comportamiento.
+
+## Para lo anterior primero vamnos a graficar nuestros datos con los valores ajustaos
+## para despues extraer los residuales de cada modelo y comenzar los analisis correspondientes.
+
+x11()
+plot (mod1, ylab="acciones", xlab="año", main="acciones ICA", type="o")
+lines (fitted (mod1), col="brown", type="o")
+lines (fitted (mod2), col="blue", type="o")
+lines (fitted (mod3), col="red", type="o")
+lines (fitted (mod4), col="orange", type="o")
+
+res1 <- residuals (mod1)
+res2 <- residuals (mod2)
+res3 <- residuals (mod3)
+res4 <- residuals (mod4)
+
+plot (res1, ylab="residuales", xlab="")
+plot (res2, ylab="residuales", xlab="")
+plot (res3, ylab="residuales", xlab="")
+plot (res4, ylab="residuales", xlab="")
+
+hist(res1, nclass="FD", main="histograma residuales")
+hist(res2, nclass="FD", main="histograma residuales")
+hist(res3, nclass="FD", main="histograma residuales")
+hist(res4, nclass="FD", main="histograma residuales")
+
+#### prueba de autocorrelaciones a los residuales####
+## Para analizar las autocorrelaciones hemos cvisto que utilizamos la funcion acf 
+## en la cual nos muestra un correlograma que nos permite 
+## mostrar la relacion que existe entre los datos 
+## ademas de esta prueba de ljung bx para esta prueba se utilizara la funcion
+## box.test que permite conocer la correlacion que existe entre los residuales a traves de una prueba de hipotesis 
+
+## para obtener el correlograma de los residuales analizados 
+#3 se realiza de la siguiente manera
+Acf (res1, main="res1")
+Acf (res2, main="res1")
+Acf (res3, main="res1")
+Acf (res4, main="res1")
+
+### para comprobar la correlacion de los residuales utilizamos una prueba que se llama
+##ljung box que nos permite saber con mayor certeza 
+## si existe correlacion o no de los residuales 
+
+Box.test (res1, lag=10 type="Lj")
+Box.test (res2, lag=10 type="Lj")
+Box.test (res3, lag=10 type="Lj")
+Box.test (res4, lag=10 type="Lj")
+
+### el estadistico Q de Ljung box prueba la hipotesis nula de que las autocorrelaciones 
+## los valores de los datos son aleatorios e independientes hasta un cierto  numero de de desfases
+## las autocorrelaciones paa uno o mas desfases podrian ser estadisticamente
+### significativas diferentesde cero, lo que indicaria que los valores no son aleatorio
+### ni independiente 
+
+#### las etapas que se utilizan en un analisis de residuales son:
+# 1) elegir el modelo a traves de las medidas MAE y RMSE
+# 2) Realizar las pruebas a los residuales de normalidad , independenica, y varianza
+#    constante una vez que laspruebas son viables ya se puede elegir el modelo
