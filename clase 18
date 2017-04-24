@@ -1,0 +1,29 @@
+icts<-ts(ic[,1],frequency =12,start=2010 )
+plot(icts)
+ic
+icts
+83*.8
+
+ic8<-window(icts,start=c(2012,1), end= c(2015,8))
+ic2<-window(icts,start=c(2015,9), end= c(2016,11))
+ic8
+install.packages("fpp")
+require(fpp)
+m1<-holt(ic8,alpha=.8,beta = .2,initial = "simple",h=15)
+m1
+m2<-holt(ic8,alpha=.8,beta = .2,initial = "simple",exponential = T,h=15)
+m2
+m3<-holt(ic8,domped=T,h=15)
+m3
+m4<-holt(ic8,domped=T,exponential = T,h=15)
+m4
+names(m1)
+plot(ic2)
+
+x11()
+plot(icts,main = "Acciones ")
+lines(ic2,col="violet",type="o")
+lines(m1$mean,col="green",type="o")
+lines(m2$mean,col="red",type="o")
+lines(m3$mean,col="blue",type="o")
+lines(m4$mean,col="pink",type="o")
