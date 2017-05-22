@@ -1,0 +1,42 @@
+install.packages("forecast")
+require (forecast)
+install.packages("fpp")
+require(fpp)
+bimbo <- read.csv("C:\\Users\\SALA-D5\\Desktop\\bimboa.csv")
+
+bimts <- ts (bimbo, frequency=260, start=2016)
+adf.test(bimts)
+dbimts <-diff(bimts) ## aplicamos la primera diferenciacion con la funcion debido a que la serie original no es estacionaria.
+acf(dbimts)### en este determinamos el numero de que se asocia con los promedios moviles
+### para determinar el valor de p que se relaciona con los modlos autorregresivos se utiliza la funcion pacf()
+pacf(dbimts) ### segun el correlograma de pacf el valor de p es 1
+#### por lo que se propone un modelo ARIMA (1,1,2)
+modbim <- Arima(bimts, order =c (1,1,2))
+modbim
+modbim1 <- Arima (bimts, order =c (2,1,2))
+modbim1
+### entre estos dos modelos habria que revisar el valor de AICc y el menor valor de AICc seria el mejor modelo con el criterio de 
+### aikaike
+modres <- residuals (modbim)
+Box.test(modres, lag =12, type="Ljung-Box")### p value grande sigiere residuales son ruido blaco
+
+mod1 <- forecast (modbim, h=12)
+x11()
+plot (forecast (modbim, h=12), include=18)
+mod1
+summary(mod1)
+auto.arima(bimts)
+
+cemex <- read.csv("C:\\Users\\SALA-D5\\Desktop\\cemex.csv")
+cemts <- ts (cemex, frequency=260, start=2016)
+adf.test(cemts)
+dcemts <-diff(cemts)
+acf(dcemts)
+pacf(dcemts) 
+modbim <- Arima(cemts, order =c (1,1,2))
+modbim
+modbim1 <- Arima (cemts, order =c (2,1,2))
+modbim1
+
+modres <- residuals (modbim)
+Box.test(modres, lag =12, type="Ljung-Box")### p value grande sigiere residuales son ruido blaco
