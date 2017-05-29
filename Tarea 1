@@ -1,0 +1,18 @@
+### TAREA 1#
+### modelo multiplicativo
+
+# buscar una serie de tiempo con tendencia a la alza y estacionalidad.
+#### precios historicos del pib 
+PIB<-read.csv(file.choose())
+PIBTS<-ts(PIB,frequency = 12,start = 2016)
+
+# Descomponer la serie de tiempo por modelo multiplicativo
+PIBTS<-decompose(PIB,type = "multiplicative")
+plot(PIBTS)
+# Obtener y graficar la tendencia
+PIBTS$seasonal
+plot(PIBTS$seasonal,main="PIB")
+monthplot(PIBTS$seasonal,main="Estacionalidad DEL PIB",ylab = " TRIMESTRE")
+
+plot(PIB,col="red",main = "PIB",ylab = "precio")
+lines(PIB$trend,col="pink",ylab="Tendencia")
