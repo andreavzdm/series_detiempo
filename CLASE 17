@@ -1,0 +1,25 @@
+###
+mod2<-hw(deso,seasonal="additive")
+mod3<-hw(deso,seasonal="multiplicative")
+######buscar y generar una serie de tiempo estacional (minimo 15 datos) y aplicar el pronostico en los dos metodos
+####3de holt winter y ademas apliquen el pronostico de tendencia exponencial y grafiquen para comparar.
+
+accion<-read.csv(file.choose())
+serie<-ts(accion[18:35,1], frequency = 252, start = c(2016,2))
+serie
+plot(serie)
+
+require(fpp)
+mod1<-hw(serie,seasonal="additive",h=4)
+mod2<-hw(serie,seasonal="multiplicative",h=4)
+mod2
+
+mod3<-holt(serie,alpha=0.8,beta=0.2,initial="simple",exponential=TRUE,h=5)
+
+x11()
+plot(mod1,main="Serie")
+
+lines(mod2$mean,col="red")
+lines(mod3$mean,col="green")
+
+legend("topleft",lty=2,col=c(1,"red","green"),legend=c("aditivo holt","multiplicativo Holt", "Exponencial Holt"),pch=64)
