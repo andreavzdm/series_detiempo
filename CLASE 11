@@ -1,0 +1,42 @@
+pib<-read.csv("C://Users//SALA-D5//Desktop//PIB.csv", header = T)
+pib
+pibts<- ts(pib,frequency = 1, start = 1960)
+plot(pibts)
+acf(pibts,ylab="Porcentaje",xlab="PIB Anual 1960-2015",col = rainbow(5))
+
+
+
+# MODELOS LINEALES PARA PRONOSTICAR ###
+###.METODO INGENUO
+## Son la aplicacion de pronosticos lineales como el ingenuo, pomedio, ingenuo estacional
+## y el de deriva el pronostico ingenuo esta basado en la ultima observacion que arroja
+## la ST, Es decir, este pronostico asume que la observacion mas importante es la ultima.
+## Funcion en r
+## naive (serie,h= num pronosticos)
+
+install.packages("forecast")
+require (forecast)
+
+naive(pibts,h=4)
+
+
+
+#METODO PROMEDIO
+## este metodo le da el mismo peso a todos los datos u observaciones
+## es decir, se asume con este metodo que todas las observaciones tiene la misma
+## importancia por lo que el pronostico es un promedio de todas las observaciones
+## funcion en r
+## meanf(serie, h= num pronosticos)
+meanf(pibts, h=4)
+plot(meanf(pibts, h=4))
+
+
+##METODO INGENUO ESTACIONAL
+## Este metodo se utiliza en ST con alta estacionalidad, este pronostico consite en darle
+## el mayor peso o la mayor ponderacion al dato del mismo periodo en el año anterior
+## por ejem, trimestre 2 del 2005 es igual a trimestre 2 dek 2006
+##Fn de R
+## snaive(serie, h)
+snaive(pibts,h=4)
+
+plot(snaive(pibts,h=4))
